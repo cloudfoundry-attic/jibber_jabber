@@ -26,7 +26,7 @@ var _ = Describe("Windows", func() {
 	Describe("#DetectIETF", func() {
 		It("detects correct IETF locale", func() {
 			locale, _ := DetectIETF()
-			matched, err := regexp.MatchString(LOCALE_REGEXP, locale)
+			matched, _ := regexp.MatchString(LOCALE_REGEXP, locale)
 			Ω(matched).Should(BeTrue())
 		})
 	})
@@ -34,7 +34,7 @@ var _ = Describe("Windows", func() {
 	Describe("#DetectLanguage", func() {
 		It("detects correct Language", func() {
 			language, _ := DetectLanguage()
-			matched, err := regexp.MatchString(LANGUAGE_REGEXP, language)
+			matched, _ := regexp.MatchString(LANGUAGE_REGEXP, language)
 			Ω(matched).Should(BeTrue())
 		})
 	})
@@ -42,7 +42,7 @@ var _ = Describe("Windows", func() {
 	Describe("#DetectTerritory", func() {
 		It("detects correct Territory", func() {
 			territory, _ := DetectTerritory()
-			matched, err := regexp.MatchString(TERRITORY_REGEXP, territory)
+			matched, _ := regexp.MatchString(TERRITORY_REGEXP, territory)
 			Ω(matched).Should(BeTrue())
 		})
 	})
