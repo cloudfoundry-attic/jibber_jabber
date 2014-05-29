@@ -16,7 +16,7 @@ func getWindowsLocale() (locale string, err error) {
 	proc := dll.MustFindProc("GetSystemDefaultLocaleName")
 	r, _, dllError := proc.Call(uintptr(unsafe.Pointer(&buffer[0])), uintptr(LOCALE_NAME_MAX_LENGTH))
 	if r == 0 {
-		err := errors.New(COULD_NOT_DETECT_PACKAGE_ERROR_MESSAGE + ":\n" + dllError.Error())
+		err = errors.New(COULD_NOT_DETECT_PACKAGE_ERROR_MESSAGE + ":\n" + dllError.Error())
 		return
 	}
 
@@ -33,7 +33,7 @@ func DetectIETF() (locale string, err error) {
 func DetectLanguage() (language string, err error) {
 	windows_locale, err := getWindowsLocale()
 	if err == nil {
-		language, _ = splitLocale(unix_locale)
+		language, _ = splitLocale(windows_locale)
 	}
 
 	return
@@ -42,7 +42,7 @@ func DetectLanguage() (language string, err error) {
 func DetectTerritory() (territory string, err error) {
 	windows_locale, err := getWindowsLocale()
 	if err == nil {
-		_, territory = splitLocale(unix_locale)
+		_, territory = splitLocale(windows_locale)
 	}
 
 	return
