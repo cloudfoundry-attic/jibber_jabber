@@ -4,7 +4,6 @@ package jibber_jabber_test
 import (
 	. "github.com/XenoPhex/jibber_jabber"
 	"regexp"
-	"strings"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
