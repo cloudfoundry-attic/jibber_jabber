@@ -4,7 +4,6 @@ package jibber_jabber
 import (
 	"errors"
 	"os"
-	"strings"
 )
 
 func getLangFromEnv() (locale string) {
