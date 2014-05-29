@@ -1,4 +1,5 @@
 // +build windows
+
 package jibber_jabber
 
 import (
