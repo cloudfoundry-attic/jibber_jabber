@@ -26,7 +26,7 @@ func getWindowsLocale() (locale string, err error) {
 }
 
 func DetectIETF() (locale string, err error) {
-	windows_locale, err := getWindowsLocale()
+	locale, err = getWindowsLocale()
 	return
 }
 
