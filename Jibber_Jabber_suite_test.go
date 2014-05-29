@@ -1,4 +1,4 @@
-package Jibber_Jabber_test
+package jibber_jabber_test
 
 import (
 	. "github.com/onsi/ginkgo"

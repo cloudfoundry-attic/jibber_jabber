@@ -1,8 +1,8 @@
 // +build darwin freebsd linux netbsd openbsd
-package Jibber_Jabber_test
+package jibber_jabber_test
 
 import (
-	. "github.com/XenoPhex/Jibber_Jabber"
+	. "github.com/XenoPhex/jibber_jabber"
 	"os"
 
 	. "github.com/onsi/ginkgo"
