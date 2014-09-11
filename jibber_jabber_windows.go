@@ -87,7 +87,7 @@ func getWindowsLocale() (locale string, err error) {
 			locale, err = getAllWindowsLocaleFrom("GetSystemDefaultLCID")
 		}
 	} else {
-		panic(fmt.Sprintf("we do not know what we are doing and the value is: %s" + syscall.UTF16ToString(isVistaOrGreater)))
+		panic(fmt.Sprintf("we do not know what we are doing and the value is: %d" + isVistaOrGreater))
 	}
 	return
 }
