@@ -4,7 +4,6 @@ package jibber_jabber
 
 import (
 	"errors"
-	"fmt"
 	"syscall"
 	"unsafe"
 )
