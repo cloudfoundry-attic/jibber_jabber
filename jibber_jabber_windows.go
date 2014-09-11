@@ -4,7 +4,6 @@ package jibber_jabber
 
 import (
 	"errors"
-	"fmt"
 	"syscall"
 	"unsafe"
 )
@@ -73,7 +72,6 @@ func getWindowsLocale() (locale string, err error) {
 
 	v, _, _ := proc.Call()
 	windowsVersion := byte(v)
-	fmt.Printf("Windows version %d.%d (Build %d)\n", windowsVersion, uint8(v>>8), uint16(v>>16))
 	isVistaOrGreater := (windowsVersion >= 6)
 
 	if isVistaOrGreater {
