@@ -65,28 +65,28 @@ func getWindowsLocale() (locale string, err error) {
 		return "", errors.New("Could not find kernel32 dll")
 	}
 
-	proc, err := dll.FindProc("IsWindowsVistaOrGreater")
+	proc, err := dll.FindProc("GetVersion")
 	if err != nil {
 		return "", err
 	}
 
-	r, isVistaOrGreater, dllError := proc.Call()
-	if r == 0 {
-		return "", errors.New("Could not determine if the version of Windows is Vista or later:\n" + dllError.Error())
-	}
+	v, _, _ := p.Call()
+	windowsVersion := byte(v)
+	fmt.Printf("Windows version %d.%d (Build %d)\n", windowsVersion, uint8(v>>8), uint16(v>>16))
+	isVistaOrGreater := (windowsVersion >= 6)
 
-	if isVistaOrGreater == 1 {
+	if isVistaOrGreater {
 		locale, err = getWindowsLocaleFrom("GetUserDefaultLocaleName")
 		if err != nil {
 			locale, err = getWindowsLocaleFrom("GetSystemDefaultLocaleName")
 		}
-	} else if isVistaOrGreater == 0 {
+	} else if !isVistaOrGreater {
 		locale, err = getAllWindowsLocaleFrom("GetUserDefaultLCID")
 		if err != nil {
 			locale, err = getAllWindowsLocaleFrom("GetSystemDefaultLCID")
 		}
 	} else {
-		panic(isVistaOrGreater)
+		panic(v)
 	}
 	return
 }
