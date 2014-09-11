@@ -10,7 +10,7 @@ import (
 
 const LOCALE_NAME_MAX_LENGTH uint32 = 85
 
-var SUPPORTED_LOCALES = map[int]string{
+var SUPPORTED_LOCALES = map[uintptr]string{
 	0x0407: "de-DE",
 	0x0409: "en-US",
 	0x0c0a: "es-ES", //or is it 0x040a
@@ -70,7 +70,7 @@ func getWindowsLocale() (locale string, err error) {
 		return "", err
 	}
 
-	r, isVistaOrGreater, dllErrpr := proc.Call()
+	r, isVistaOrGreater, dllError := proc.Call()
 	if r == 0 {
 		return "", errors.New("Could not determine if the version of Windows is Vista or later:\n" + dllError.Error())
 	}
@@ -80,13 +80,13 @@ func getWindowsLocale() (locale string, err error) {
 		if err != nil {
 			locale, err = getWindowsLocaleFrom("GetSystemDefaultLocaleName")
 		}
-	} else if VistaOrGreater == 0 {
+	} else if isVistaOrGreater == 0 {
 		locale, err = getAllWindowsLocaleFrom("GetUserDefaultLCID")
 		if err != nil {
 			locale, err = getAllWindowsLocaleFrom("GetSystemDefaultLCID")
 		}
 	} else {
-		panic("we do not know what we are doing and the value is: " + isVistaOrGreater)
+		panic(fmt.Sprintf("we do not know what we are doing and the value is: %#v" + isVistaOrGreater))
 	}
 	return
 }
