@@ -46,7 +46,7 @@ func getAllWindowsLocaleFrom(sysCall string) (string, error) {
 	if locale == 0 {
 		return "", errors.New(COULD_NOT_DETECT_PACKAGE_ERROR_MESSAGE + ":\n" + dllError.Error())
 	}
-	proc, err = dll.FindProc("GetLocaleInfo")
+	proc, err = dll.FindProc("GetLocaleInfoW")
 	if err != nil {
 		return "", err
 	}
@@ -57,12 +57,11 @@ func getAllWindowsLocaleFrom(sysCall string) (string, error) {
 		return "", err
 	}
 	countryBuf := make([]uint16, LOCALE_SISO_NAME_MAX_LENGTH)
-	r, _, dllError = proc.Call(locale, uintptr(LOCALE_SISO3166CTRYNAME), uintptr(unsafe.Pointer(&langBuf[0])), uintptr(LOCALE_SISO_NAME_MAX_LENGTH))
+	r, _, dllError = proc.Call(locale, uintptr(LOCALE_SISO3166CTRYNAME), uintptr(unsafe.Pointer(&countryBuf[0])), uintptr(LOCALE_SISO_NAME_MAX_LENGTH))
 	if r == 0 {
 		err = errors.New(COULD_NOT_DETECT_PACKAGE_ERROR_MESSAGE + ":\n" + dllError.Error())
 		return "", err
 	}
-	
 	return syscall.UTF16ToString(langBuf) + "-" + syscall.UTF16ToString(countryBuf), nil
 }
 
