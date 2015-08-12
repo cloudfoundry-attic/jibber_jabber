@@ -11,7 +11,7 @@ Windows via [GetUserDefaultLocaleName](http://msdn.microsoft.com/en-us/library/w
 Add the following line to your go `import`:
 
 ```
-	"github.com/pivotal-cf-experimental/jibber_jabber"
+	"github.com/cloudfoundry/jibber_jabber"
 ```
 
 ### DetectIETF
