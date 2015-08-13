@@ -9,21 +9,11 @@ import (
 )
 
 const LOCALE_NAME_MAX_LENGTH uint32 = 85
-
-var SUPPORTED_LOCALES = map[uintptr]string{
-	0x0407: "de-DE",
-	0x0409: "en-US",
-	0x0c0a: "es-ES", //or is it 0x040a
-	0x040c: "fr-FR",
-	0x0410: "it-IT",
-	0x0411: "ja-JA",
-	//0x0412: "ko_KO", - Will add support for Korean when nicksnyder/go-i18n supports Korean
-	0x0416: "pt-BR",
-	//0x0419: "ru_RU", - Will add support for Russian when nicksnyder/go-i18n supports Russian
-	0x0804: "zh-CN",
-	0x0c04: "zh-HK",
-	0x0404: "zh-TW",
-}
+// https://msdn.microsoft.com/en-us/library/windows/desktop/dd373848(v=vs.85).aspx
+const LOCALE_SISO_NAME_MAX_LENGTH uint32 = 9
+// defined in winnls.h
+const LOCALE_SISO639LANGNAME uint32 = 0x59
+const LOCALE_SISO3166CTRYNAME uint32 = 0x5a
 
 func getWindowsLocaleFrom(sysCall string) (locale string, err error) {
 	buffer := make([]uint16, LOCALE_NAME_MAX_LENGTH)
@@ -56,8 +46,23 @@ func getAllWindowsLocaleFrom(sysCall string) (string, error) {
 	if locale == 0 {
 		return "", errors.New(COULD_NOT_DETECT_PACKAGE_ERROR_MESSAGE + ":\n" + dllError.Error())
 	}
-
-	return SUPPORTED_LOCALES[locale], nil
+	proc, err = dll.FindProc("GetLocaleInfoW")
+	if err != nil {
+		return "", err
+	}
+	langBuf := make([]uint16, LOCALE_SISO_NAME_MAX_LENGTH)
+	r, _, dllError := proc.Call(locale, uintptr(LOCALE_SISO639LANGNAME), uintptr(unsafe.Pointer(&langBuf[0])), uintptr(LOCALE_SISO_NAME_MAX_LENGTH))
+	if r == 0 {
+		err = errors.New(COULD_NOT_DETECT_PACKAGE_ERROR_MESSAGE + ":\n" + dllError.Error())
+		return "", err
+	}
+	countryBuf := make([]uint16, LOCALE_SISO_NAME_MAX_LENGTH)
+	r, _, dllError = proc.Call(locale, uintptr(LOCALE_SISO3166CTRYNAME), uintptr(unsafe.Pointer(&countryBuf[0])), uintptr(LOCALE_SISO_NAME_MAX_LENGTH))
+	if r == 0 {
+		err = errors.New(COULD_NOT_DETECT_PACKAGE_ERROR_MESSAGE + ":\n" + dllError.Error())
+		return "", err
+	}
+	return syscall.UTF16ToString(langBuf) + "-" + syscall.UTF16ToString(countryBuf), nil
 }
 
 func getWindowsLocale() (locale string, err error) {
